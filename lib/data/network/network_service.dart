@@ -1,3 +1,5 @@
+import 'package:recipes_api/models/recipe_model.dart';
+
 import '../../app/imports.dart';
 
 const String apiKey = '1332be7fa8c5cb74135d8142f827bcf7';

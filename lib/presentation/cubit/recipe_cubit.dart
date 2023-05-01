@@ -14,10 +14,10 @@ class RecipeCubit extends Cubit<RecipeState> {
   Future<dynamic> getRecipes(String query, int from, int to) async {
     try {
       emit(RecipeLoading());
-      await recipeService
+      final recipes = await recipeService
           .getRecipes(
         query,
-        firstrandom.nextInt(10),
+        0,
         secondRandom.nextInt(20),
       )
           .then((recipes) {
@@ -25,7 +25,9 @@ class RecipeCubit extends Cubit<RecipeState> {
         emit(
           RecipeLoaded(recipes: recipes),
         );
+        return recipes;
       });
+      return recipes;
     } on HttpException catch (e) {
       emit(RecipeError(message: e.toString()));
       return Future.error(e.toString());

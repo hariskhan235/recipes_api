@@ -1,4 +1,8 @@
+import 'package:recipes_api/presentation/widgets/medium_text.dart';
+import 'package:recipes_api/presentation/widgets/small_text.dart';
+
 import '../../../app/imports.dart';
+import '../../widgets/image_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -154,33 +158,33 @@ class _HomeViewState extends State<HomeView> {
                                 .inputDecorationTheme
                                 .outlineBorder!,
                           ),
-                          suffixIcon: PopupMenuButton<String>(
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.grey[100],
-                            ),
-                            onSelected: (String value) {
-                              recipeSearchController.text = value;
-                              startSearch(recipeSearchController.text);
-                            },
-                            itemBuilder: (context) {
-                              return previousSearches
-                                  .map<CustomDropdownMenuItem<String>>(
-                                      (String value) {
-                                return CustomDropdownMenuItem<String>(
-                                  text: value,
-                                  value: value,
-                                  callback: () {
-                                    setState(() {
-                                      previousSearches.remove(value);
-                                      savePreviousSearches();
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                );
-                              }).toList();
-                            },
-                          ),
+                          // suffixIcon: PopupMenuButton<String>(
+                          //   icon: Icon(
+                          //     Icons.arrow_drop_down,
+                          //     color: Colors.grey[100],
+                          //   ),
+                          //   onSelected: (String value) {
+                          //     recipeSearchController.text = value;
+                          //     startSearch(recipeSearchController.text);
+                          //   },
+                          //   itemBuilder: (context) {
+                          //     return previousSearches
+                          //         .map<CustomDropdownMenuItem<String>>(
+                          //             (String value) {
+                          //       return CustomDropdownMenuItem<String>(
+                          //         text: value,
+                          //         value: value,
+                          //         callback: () {
+                          //           setState(() {
+                          //             previousSearches.remove(value);
+                          //             savePreviousSearches();
+                          //             Navigator.pop(context);
+                          //           });
+                          //         },
+                          //       );
+                          //     }).toList();
+                          //   },
+                          // ),
                         ),
                       ),
                     ),
@@ -189,13 +193,15 @@ class _HomeViewState extends State<HomeView> {
                     style: Theme.of(context).iconButtonTheme.style,
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      context.read<RecipeCubit>().getRecipes(
-                          recipeSearchController.text
-                              .toString()
-                              .toLowerCase()
-                              .trim(),
-                          currentStartPosition,
-                          currentEndPosition);
+                      // context.read<RecipeCubit>().getRecipes(
+                      //     recipeSearchController.text
+                      //         .toString()
+                      //         .toLowerCase()
+                      //         .trim(),
+                      //     currentStartPosition,
+                      //     currentEndPosition);
+                      print('Height ${mq.height}, Width ${mq.width}');
+                      //print(mq.width);
                     },
                     icon: const Icon(
                       Icons.search,
@@ -210,9 +216,12 @@ class _HomeViewState extends State<HomeView> {
                   if (state is RecipeError) {
                     AppUtils.showSnackBar(context, state.message);
                   }
-                  if (state is RecipeLoaded) {
-                    AppUtils.showSnackBar(context, state.recipes.length);
-                  }
+                  // if (state is RecipeLoaded) {
+                  //   AppUtils.showSnackBar(
+                  //     context,
+                  //     state.recipes.length.toString(),
+                  //   );
+                  // }
                 },
                 builder: (context, state) {
                   if (state is RecipeLoading) {
@@ -229,7 +238,7 @@ class _HomeViewState extends State<HomeView> {
                     } else {
                       return Flexible(
                         child: GridView.builder(
-                          //controller: _scrollController,
+                          controller: _scrollController,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -250,64 +259,8 @@ class _HomeViewState extends State<HomeView> {
                                   ),
                                 );
                               },
-                              child: Card(
-                                elevation: 4.0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(6.0),
-                                            topRight: Radius.circular(6.0)),
-                                        child: CachedNetworkImage(
-                                          imageUrl: state.recipes['hits'][index]
-                                              ['recipe']['image'],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: size.height * 0.012,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          state.recipes['hits'][index]['recipe']
-                                              ['label'],
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .displaySmall,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: size.height * 0.004,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          getCalories(
-                                            state.recipes['hits'][index]
-                                                ['recipe']['calories'],
-                                          ),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              child: RecipeCard(
+                                  size: size, state: state, index: index),
                             );
                           },
                         ),
@@ -320,6 +273,59 @@ class _HomeViewState extends State<HomeView> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class RecipeCard extends StatelessWidget {
+  RecipeCard({
+    super.key,
+    required this.size,
+    required this.state,
+    required this.index,
+  });
+
+  final Size size;
+  RecipeLoaded state;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            imageWidget(state, index),
+            SizedBox(
+              height: size.height * 0.012,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: SmallText(
+                text: state.recipes['hits'][index]['recipe']['label'],
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.004,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: mediumText(
+                context,
+                getCalories(
+                  state.recipes['hits'][index]['recipe']['calories'],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

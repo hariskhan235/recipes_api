@@ -1,4 +1,4 @@
-import 'package:recipes_api/app/imports.dart';
+import '../imports.dart';
 
 class AppUtils {
   static void showSnackBar(BuildContext context, String message) {

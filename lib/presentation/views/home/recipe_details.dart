@@ -1,10 +1,16 @@
 // ignore: must_be_immutable
+import 'package:flutter/services.dart';
+
 import '../../../app/imports.dart';
+import '../../widgets/resuable_row.dart';
 
 // ignore: must_be_immutable
 class RecipeDetailsScreen extends StatefulWidget {
-  RecipeDetailsScreen(
-      {super.key, required this.recipe, required this.ingredients});
+  RecipeDetailsScreen({
+    super.key,
+    required this.recipe,
+    required this.ingredients,
+  });
   // ignore: prefer_typing_uninitialized_variables
   var recipe;
   List<dynamic> ingredients;
@@ -25,6 +31,13 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
           style: Theme.of(context).textTheme.displayMedium,
         ),
         centerTitle: true,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            systemNavigationBarColor: Colors.white,
+            statusBarColor: Colors.white,
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarDividerColor: Colors.white,
+            systemNavigationBarIconBrightness: Brightness.light),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -147,7 +160,8 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                           color: Colors.grey[30],
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0)),
-                          child: Flexible(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
                             child: ExpansionTile(
                               leading: Padding(
                                 padding:
@@ -180,94 +194,28 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                     Theme.of(context).textTheme.displayMedium,
                               ),
                               children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: Text(
-                                        'Measure: ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .displaySmall,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.ingredients[index]['measure']
-                                          .toString(),
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall,
-                                    ),
-                                  ],
+                                reusableRow(
+                                  context,
+                                  'Measure:',
+                                  widget.ingredients[index]['measure'],
                                 ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: Text(
-                                        'Quantity: ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .displaySmall,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.ingredients[index]['quantity']
-                                          .toString(),
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall,
-                                    ),
-                                  ],
+                                reusableRow(
+                                  context,
+                                  'Quantity: ',
+                                  widget.ingredients[index]['quantity']
+                                      .toString(),
                                 ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: Text(
-                                        'Food Category: ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .displaySmall,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.ingredients[index]['foodCategory']
-                                          .toString(),
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall,
-                                    ),
-                                  ],
+                                reusableRow(
+                                  context,
+                                  'Food Quantity: ',
+                                  widget.ingredients[index]['foodCategory']
+                                      .toString(),
                                 ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: Text(
-                                        'Weight: ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .displaySmall,
-                                      ),
-                                    ),
-                                    Text(
-                                      getWeight(
-                                        widget.ingredients[index]['weight'],
-                                      ),
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall,
-                                    ),
-                                  ],
+                                reusableRow(
+                                  context,
+                                  'Weight: ',
+                                  widget.ingredients[index]['foodCategory']
+                                      .toString(),
                                 ),
                               ],
                             ),

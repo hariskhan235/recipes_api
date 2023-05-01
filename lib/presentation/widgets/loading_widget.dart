@@ -1,6 +1,3 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../../app/imports.dart';
 
 class LoadingWidget extends StatelessWidget {

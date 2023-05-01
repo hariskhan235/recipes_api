@@ -11,7 +11,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(milliseconds: 2000),
       () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -20,7 +20,6 @@ class _SplashViewState extends State<SplashView> {
         );
       },
     );
-
     super.initState();
   }
 
@@ -28,9 +27,28 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
-      body: const Center(
-        child: Text('Splashing....'),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/recipes.jpeg'),
+            SizedBox(
+              height: mq.height * 0.02,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: mq.height * 0.04,
+              ),
+              child: Text(
+                'Search Recipe You Love',
+                style: Theme.of(context).textTheme.displayLarge,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
